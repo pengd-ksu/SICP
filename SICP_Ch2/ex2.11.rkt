@@ -1,0 +1,95 @@
+#lang sicp
+
+(define (make-interval a b)
+  (cons a b))
+
+(define (lower-bound interval)
+  (car interval))
+
+(define (upper-bound interval)
+  (cdr interval))
+
+(define (add-interval x y)
+  (make-interval (+ (lower-bound x) (lower-bound y))
+                 (+ (upper-bound x) (upper-bound y))))
+
+(define (sub-interval x y)
+  (add-interval
+   x
+   (make-interval (- (upper-bound y))
+                  (- (lower-bound y)))))
+
+(define (mul-interval x y)
+  (let ((upper-x (upper-bound x))
+        (lower-x (lower-bound x))
+        (upper-y (upper-bound y))
+        (lower-y (lower-bound y)))
+    (cond ((and (>= upper-x 0) (>= lower-x 0)
+                (>= upper-y 0) (>= lower-y 0))
+           (make-interval (* lower-x lower-y) (* upper-x upper-y)))
+          ((and (>= upper-x 0) (>= lower-x 0)
+                (>= upper-y 0) (< lower-y 0))
+           (make-interval (* upper-x lower-y) (* upper-x upper-y)))
+          ((and (>= upper-x 0) (>= lower-x 0)
+                (< upper-y 0) (< lower-y 0))
+           (make-interval (* upper-x lower-y) (* lower-x upper-y)))
+          ((and (>= upper-x 0) (< lower-x 0)
+                (>= upper-y 0) (>= lower-y 0))
+           (make-interval (* lower-x upper-y) (* upper-x upper-y)))
+          ((and (>= upper-x 0) (< lower-x 0)
+                (>= upper-y 0) (< lower-y 0))
+           (let ((p1 (* lower-x upper-y))
+                 (p2 (* upper-x lower-y))
+                 (p3 (* lower-x lower-y))
+                 (p4 (* upper-x upper-y)))
+             (make-interval (min p1 p2)
+                            (max p3 p4))))
+          ((and (>= upper-x 0) (< lower-x 0)
+                (< upper-y 0) (< lower-y 0))
+           (make-interval (* upper-x lower-y) (* lower-x lower-y)))
+          ((and (< upper-x 0) (< lower-x 0)
+                (>= upper-y 0) (>= lower-y 0))
+           (make-interval (* lower-x upper-y) (* upper-x lower-y)))
+          ((and (< upper-x 0) (< lower-x 0)
+                (>= upper-y 0) (< lower-y 0))
+           (make-interval (* lower-x upper-y) (* lower-x lower-y)))
+          ((and (< upper-x 0) (< lower-x 0)
+                (< upper-y 0) (< lower-y 0))
+           (make-interval (* upper-x upper-y) (* lower-x lower-y))))))
+
+(define (div-interval x y)
+  (if (and (<= (lower-bound y) 0)
+           (>= (upper-bound y) 0))
+      (error "division error (interval spans 0)" y)
+      (mul-interval
+       x
+       (make-interval (/ 1.0 (upper-bound y))
+                      (/ 1.0 (lower-bound y))))))
+
+; test case from
+; https://github.com/hjcapple/reading-sicp/blob/master/chapter_2/exercise_2_7.scm
+(define (print-interval v)
+  (newline)
+  (display "[")
+  (display (lower-bound v))
+  (display ", ")
+  (display (upper-bound v))
+  (display "]"))
+
+;;;;;;;;;;;;;;;;;;;;;
+(define a1 (make-interval 10 20))
+(define b1 (make-interval 1 5))
+(define a2 (make-interval -10 20))
+(define b2 (make-interval -1 5))
+(define a3 (make-interval -20 -10))
+(define b3 (make-interval -5 -1))
+
+(print-interval (mul-interval a1 b1))
+(print-interval (mul-interval a1 b2))
+(print-interval (mul-interval a1 b3))
+(print-interval (mul-interval a2 b1))
+(print-interval (mul-interval a2 b2))
+(print-interval (mul-interval a2 b3))
+(print-interval (mul-interval a3 b1))
+(print-interval (mul-interval a3 b2))
+(print-interval (mul-interval a3 b3))
