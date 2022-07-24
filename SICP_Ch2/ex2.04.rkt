@@ -14,14 +14,14 @@
 (my-car-2 pair)
 (my-cdr-2 pair)
 
-; unrolling car
+; Display with substitute model for car:
 ; (car (cons x y))
 ; (car (lambda (m) (m x y)))
 ; ((lambda (m) (m x y)) (lambda (p q) p))
 ; ((lambda (p q) p) x y)
 ; x
 
-; unrolling cdr
+; Display with substitute model for cdr
 ; (cdr (cons x y))
 ; (cdr (lambda (m) (m x y)))
 ; ((lambda (m) (m x y)) (lambda (p q) q))

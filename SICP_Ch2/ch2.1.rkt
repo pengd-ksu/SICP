@@ -135,10 +135,10 @@
       (+ 1 (length-recur (cdr items)))))
 
 (define (length-iter items)
-  (define (iter a count)
-    (if (null? a)
+  (define (iter ls count)
+    (if (null? ls)
         count
-        (iter (cdr a) (+ 1 count))))
+        (iter (cdr ls) (+ 1 count))))
   (iter items 0))
 
 (define odds (list 1 3 5 7))

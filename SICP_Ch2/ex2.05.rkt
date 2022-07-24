@@ -1,24 +1,24 @@
 #lang sicp
 
-(define (my-cons a b)
+(define (expt-cons a b)
   (* (expt 2 a)
      (expt 3 b)))
 
-(define (my-car z)
-  (define (iter z a)
-    (if (= (remainder z 2) 0)
-        (iter (/ z 2) (+ a 1))
+(define (expt-car x)
+  (define (iter x a)
+    (if (= (remainder x 2) 0)
+        (iter (/ x 2) (+ a 1))
         a))
-  (iter z 0))
+  (iter x 0))
 
-(define (my-cdr z)
-  (define (iter z b)
-    (if (= (remainder z 3) 0)
-        (iter (/ z 3) (+ b 1))
+(define (expt-cdr x)
+  (define (iter x b)
+    (if (= (remainder x 3) 0)
+        (iter (/ x 3) (+ b 1))
         b))
-  (iter z 0))
+  (iter x 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(my-cons 2 3)
-(my-car (my-cons 10 20))
-(my-cdr (my-cons 10 20))
+(expt-cons 2 3)
+(expt-car (expt-cons 10 20))
+(expt-cdr (expt-cons 10 20))

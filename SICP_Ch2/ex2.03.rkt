@@ -48,7 +48,7 @@
           (x-point (start-segment (cdr rect))))))
 (define (rect-height-p rect)
   (abs (- (y-point (start-segment (car rect)))
-          (y-point (end-segment (cdr rect))))))
+          (y-point (end-segment (car rect))))))
 ; Representation 2: p1 and p2 are diagonal segments of a rectangle
 (define (make-rect-d p1 p2)
   (cons p1 p2))
