@@ -1,10 +1,10 @@
 #lang sicp
 
 (define (reverse items)
-  (define (iter items ls)
-    (if (null? items)
-        ls
-        (iter (cdr items) (cons (car items) ls))))
-  (iter items nil))
+  (define (reverse-iter ls result)
+    (if (null? ls)
+        result
+        (reverse-iter (cdr ls) (append (list (car ls)) result))))
+  (reverse-iter items nil))
 
 (reverse (list 1 4 9 16 25))
