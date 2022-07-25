@@ -1,4 +1,4 @@
-; Exercise 2.20
+; Exercise 2.23
 #lang sicp
 
 (define (for-each proc items)
