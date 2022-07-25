@@ -155,3 +155,25 @@
 
 (my-append squares odds)
 (my-append odds squares)
+
+; Mapping over lists
+(define (scale-list items factor)
+  (if (null? items)
+      nil
+      (cons (* (car items) factor)
+            (scale-list (cdr items)
+                        factor))))
+(scale-list (list 1 2 3 4 5) 10)
+
+(define (map-v1 proc items)
+  (if (null? items)
+      nil
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+(map-v1 abs (list -10 2.5 -11.6 17))
+(map-v1 (lambda (x) (* x x)) (list 1 2 3 4))
+
+(define (scale-list-v1 items factor)
+  (map-v1 (lambda (x) (* x factor))
+          items))
+(scale-list-v1 (list 1 2 3 4 5) 10)
