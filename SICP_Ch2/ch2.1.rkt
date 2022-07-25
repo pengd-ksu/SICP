@@ -177,3 +177,10 @@
   (map-v1 (lambda (x) (* x factor))
           items))
 (scale-list-v1 (list 1 2 3 4 5) 10)
+
+; 2.2.2 Hierachical Structures
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
