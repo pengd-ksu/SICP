@@ -184,3 +184,19 @@
         ((not (pair? x)) 1)
         (else (+ (count-leaves (car x))
                  (count-leaves (cdr x))))))
+
+; Mapping over trees
+(define (scale-tree-v1 tree factor)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (* tree factor))
+        (else (cons (scale-tree-v1 (car tree) factor)
+                    (scale-tree-v1 (cdr tree) factor)))))
+(scale-tree-v1 (list 1 (list 2 (list 3 4) 5) (list 6 7)) 10)
+
+(define (scale-tree-v2 tree factor)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (scale-tree-v2 sub-tree factor)
+             (* sub-tree factor)))
+       tree))
+(scale-tree-v2 (list 1 (list 2 (list 3 4) 5) (list 6 7)) 10)

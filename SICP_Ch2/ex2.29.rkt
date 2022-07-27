@@ -52,3 +52,5 @@
 (total-weight-mobile c)
 (balanced-mobile? b)
 (balanced-mobile? c)
+
+; d: only to change (define right-branch cdr) and (define branch-structure cdr)
