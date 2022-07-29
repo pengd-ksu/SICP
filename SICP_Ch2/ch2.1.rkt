@@ -60,8 +60,10 @@
   (z 1))
 
 (define a (my-cons 3 5))
-(my-car a)
-(my-cdr a)
+; (my-car a)
+; 3
+; (my-cdr a)
+; 5
 
 ; 2.1.4 Extended Exercise: Interval Arithmetic
 (define (make-interval a b)
@@ -126,8 +128,8 @@
       (car items)
       (list-ref (cdr items) (- n 1))))
 
-(define squares (list 1 4 9 16 25))
-(list-ref squares 3)
+;(define squares (list 1 4 9 16 25))
+;(list-ref squares 3)
 
 (define (length-recur items)
   (if (null? items)
@@ -142,19 +144,23 @@
   (iter items 0))
 
 (define odds (list 1 3 5 7))
-(length-recur odds)
-(length-iter odds)
+; (length-recur odds)
+; 4
+; (length-iter odds)
+; 4
 
-(append squares odds)
-(append odds squares)
+;(append squares odds)
+; (1 4 9 16 25 1 3 5 7)
+;(append odds squares)
+;(1 3 5 7 1 4 9 16 25)
 
 (define (my-append list1 list2)
   (if (null? list1)
       list2
       (cons (car list1) (my-append (cdr list1) list2))))
 
-(my-append squares odds)
-(my-append odds squares)
+;(my-append squares odds)
+;(my-append odds squares)
 
 ; Mapping over lists
 (define (scale-list items factor)
@@ -163,20 +169,25 @@
       (cons (* (car items) factor)
             (scale-list (cdr items)
                         factor))))
-(scale-list (list 1 2 3 4 5) 10)
+;(scale-list (list 1 2 3 4 5) 10)
+;(10 20 30 40 50)
 
 (define (map-v1 proc items)
   (if (null? items)
       nil
       (cons (proc (car items))
             (map proc (cdr items)))))
-(map-v1 abs (list -10 2.5 -11.6 17))
-(map-v1 (lambda (x) (* x x)) (list 1 2 3 4))
+;(map-v1 abs (list -10 2.5 -11.6 17))
+;(10 2.5 11.6 17)
+
+;(map-v1 (lambda (x) (* x x)) (list 1 2 3 4))
+;(1 4 9 16)
 
 (define (scale-list-v1 items factor)
   (map-v1 (lambda (x) (* x factor))
           items))
-(scale-list-v1 (list 1 2 3 4 5) 10)
+;(scale-list-v1 (list 1 2 3 4 5) 10)
+;(10 20 30 40 50)
 
 ; 2.2.2 Hierachical Structures
 (define (count-leaves x)
@@ -191,7 +202,8 @@
         ((not (pair? tree)) (* tree factor))
         (else (cons (scale-tree-v1 (car tree) factor)
                     (scale-tree-v1 (cdr tree) factor)))))
-(scale-tree-v1 (list 1 (list 2 (list 3 4) 5) (list 6 7)) 10)
+;(scale-tree-v1 (list 1 (list 2 (list 3 4) 5) (list 6 7)) 10)
+;(10 (20 (30 40) 50) (60 70))
 
 (define (scale-tree-v2 tree factor)
   (map (lambda (sub-tree)
@@ -199,4 +211,111 @@
              (scale-tree-v2 sub-tree factor)
              (* sub-tree factor)))
        tree))
-(scale-tree-v2 (list 1 (list 2 (list 3 4) 5) (list 6 7)) 10)
+;(scale-tree-v2 (list 1 (list 2 (list 3 4) 5) (list 6 7)) 10)
+;(10 (20 (30 40) 50) (60 70))
+
+; 2.2.3 Sequences as Conventional Interfaces
+(define (square x)
+  (* x x))
+
+(define (sum-odd-squares-v1 tree)
+  (cond ((null? tree) 0)
+        ((not (pair? tree))
+         (if (odd? tree)
+             (square tree)
+             0))
+        (else (+ (sum-odd-squares-v1 (car tree))
+                 (sum-odd-squares-v1 (cdr tree))))))
+
+;(sum-odd-squares-v1 (list 1 (list 2 (list 3 4) 5) (list 6 7)))
+; 84
+
+; fib from chapter 1
+(define (fib n)
+  (define (fib-iter a b count)
+    (if (= count 0)
+        b
+        (fib-iter (+ a b) a (- count 1))))
+  (fib-iter 1 0 n))
+
+(define (even-fibs-v1 n)
+  (define (next k)
+    (if (> k n)
+        nil
+        (let ((f (fib k)))
+          (if (even? f)
+              (cons f (next (+ k 1)))
+              (next (+ k 1))))))
+  (next 0))
+
+;(fib 7)
+;13
+;(even-fibs-v1 7)
+;(0 2 8)
+
+(define (filter predicate sequence)
+  (cond ((null? sequence) nil)
+        ((predicate (car sequence))
+         (cons (car sequence)
+               (filter predicate (cdr sequence))))
+        (else (filter predicate (cdr sequence)))))
+
+;(filter odd? (list 1 2 3 4 5))
+;(1 3 5)
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+;(accumulate + 0 (list 1 2 3 4 5))
+;15
+;(accumulate * 1 (list 1 2 3 4 5))
+;120
+;(accumulate cons nil (list 1 2 3 4 5))
+;(1 2 3 4 5)
+
+(define (enumerate-interval low high)
+  (if (> low high)
+      nil
+      (cons low (enumerate-interval (+ low 1) high))))
+;(enumerate-interval 2 7)
+;(2 3 4 5 6 7)
+(define (enumerate-tree tree)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (list tree))
+        (else (append (enumerate-tree (car tree))
+                      (enumerate-tree (cdr tree))))))
+;(enumerate-tree (list 1 (list 2 (list 3 4)) 5))
+;(1 2 3 4 5)
+
+(define (sum-odd-squares-v2 tree)
+  (accumulate
+   + 0 (map square (filter odd? (enumerate-tree tree)))))
+;(sum-odd-squares-v2 (list 1 (list 2 (list 3 4) 5) (list 6 7)))
+;84
+
+(define (even-fibs-v2 n)
+  (accumulate
+   cons
+   nil
+   (filter even? (map fib (enumerate-interval 0 n)))))
+;(fib 7)
+;13
+;(even-fibs-v2 7)
+;(0 2 8)
+
+(define (list-fib-squares n)
+  (accumulate
+   cons
+   nil
+   (map square (map fib (enumerate-interval 0 n)))))
+
+;(list-fib-squares 10)
+;(0 1 1 4 9 25 64 169 441 1156 3025)
+
+(define (product-of-squares-of-odd-elements sequence)
+  (accumulate * 1 (map square (filter odd? sequence))))
+
+;(product-of-squares-of-odd-elements (list 1 2 3 4 5))
+;225
