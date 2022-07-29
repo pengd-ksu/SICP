@@ -6,11 +6,13 @@
       (op (car sequence)
           (accumulate op initial (cdr sequence)))))
 
-(define (horner-eval x coefficient-sequence)
-  (accumulate (lambda (this-coeff higher-terms) (+ (* x higher-terms)
-                                                   this-coeff))
+(define (count-leaves t)
+  (accumulate +
               0
-              coefficient-sequence))
+              (map (lambda (x)
+                     (if (pair? x)
+                         (count-leaves x)
+                         1))
+                   t)))
 
-(horner-eval 2 (list 1 3 0 0 5 0 1))
-;151
+(count-leaves (list 1 (list 2 (list 3 4))))
