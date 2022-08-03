@@ -56,6 +56,7 @@
   (= (abs (- (row position1) (row position2)))
      (abs (- (col position1) (col position2)))))
 
+; column is from 1 to k (both ends inclusive)
 (define (safe? k positions)
   (let* ((pair_list (map cons positions (enumerate-interval 1 k))); back to (row, col)
          (val (car pair_list)))
