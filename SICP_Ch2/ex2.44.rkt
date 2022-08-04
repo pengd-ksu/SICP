@@ -28,7 +28,8 @@
       painter
       (let ((smaller (up-split painter (- n 1))))
         (below painter (beside smaller smaller)))))
-(paint (up-split wave 4))
+
+;(paint (up-split wave 4))
 
 (define (corner-split painter n)
   (if (= n 0)
