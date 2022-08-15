@@ -16,29 +16,42 @@
 (define wave4 (flipped-pairs wave))
 ;(paint wave4)
 
-(define (right-split painter n)
+(define (right-split-v1 painter n)
   (if (= n 0)
       painter
-      (let ((smaller (right-split painter (- n 1))))
+      (let ((smaller (right-split-v1 painter (- n 1))))
         (beside painter (below smaller smaller)))))
-;(paint (right-split wave 8))
+;(paint (right-split-v1 wave 8))
 
 ; Exercise 2.44
-(define (up-split painter n)
+(define (up-split-v1 painter n)
   (if (= n 0)
       painter
-      (let ((smaller (up-split painter (- n 1))))
+      (let ((smaller (up-split-v1 painter (- n 1))))
         (below painter
                (beside smaller
                        smaller)))))
+;(paint (up-split-v1 wave 4))
 
-(paint (up-split wave 4))
+; Exercise 2.45
+(define (split o1 o2)
+  (lambda (painter n)
+    (if (= n 0)
+        painter
+        (let ((smaller ((split o1 o2) painter (- n 1))))
+          (o1 painter
+              (o2 smaller
+                  smaller))))))
+
+(define right-split-v2 (split beside below))
+
+(define up-split-v2 (split below beside))
 
 (define (corner-split painter n)
   (if (= n 0)
       painter
-      (let ((up (up-split painter (- n 1)))
-            (right (right-split painter (- n 1))))
+      (let ((up (up-split-v2 painter (- n 1)))
+            (right (right-split-v2 painter (- n 1))))
         (let ((top-left (beside up up))
               (bottom-right (below right right))
               (corner (corner-split painter (- n 1))))
