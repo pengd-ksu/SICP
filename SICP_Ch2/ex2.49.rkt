@@ -166,13 +166,13 @@
                       (make-segment (make-vect 0 0.99) (make-vect 0.99 0.99))
                       (make-segment (make-vect 0.99 0.99) (make-vect 0.99 0))
                       (make-segment (make-vect 0.99 0) (make-vect 0 0)))))
-; (paint designated-frame)
+(paint designated-frame)
 
 (define x-frame
   (segments->painter (list
                       (make-segment (make-vect 0 0) (make-vect 1 1))
                       (make-segment (make-vect 0 1) (make-vect 1 0)))))
-; (paint x-frame)
+(paint x-frame)
 
 (define diamond-frame
   (segments->painter (list
@@ -180,7 +180,7 @@
                       (make-segment (make-vect 0.5 0) (make-vect 1 0.5))
                       (make-segment (make-vect 1 0.5) (make-vect 0.5 1))
                       (make-segment (make-vect 0.5 1) (make-vect 0 0.5)))))
-; (paint diamond-frame)
+(paint diamond-frame)
 
 (define George
   (segments->painter (list
@@ -206,4 +206,4 @@
                       (make-segment (make-vect .6 0) (make-vect .5 .3)) 
                       (make-segment (make-vect .5 .3) (make-vect .4 0)) 
                       (make-segment (make-vect .4 0) (make-vect .25 0)))))
-; (paint George)
+(paint George)

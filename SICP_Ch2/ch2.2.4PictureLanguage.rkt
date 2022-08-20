@@ -129,9 +129,12 @@
 (define a-frame (make-frame-v1 (make-vect 0 0)
                                (make-vect 2 0)
                                (make-vect 0 2)))
-; ((frame-coord-map-v1 a-frame) (make-vect 0 0)) -> '(0 . 0)
-; ((frame-coord-map-v1 a-frame) (make-vect 1 1)) -> '(2 . 2)
-; (origin-frame a-frame) -> '(0 . 0)
+; ((frame-coord-map-v1 a-frame) (make-vect 0 0))
+;'(0 . 0)
+; ((frame-coord-map-v1 a-frame) (make-vect 1 1))
+;'(2 . 2)
+; (origin-frame a-frame
+;'(0 . 0)
 
 ; Exercise 2.47
 (define (make-frame-v2 origin edge1 edge2)
@@ -188,13 +191,13 @@
                       (make-segment (make-vect 0 0.99) (make-vect 0.99 0.99))
                       (make-segment (make-vect 0.99 0.99) (make-vect 0.99 0))
                       (make-segment (make-vect 0.99 0) (make-vect 0 0)))))
-; (paint designated-frame)
+;(paint designated-frame)
 
 (define x-frame
   (segments->painter (list
                       (make-segment (make-vect 0 0) (make-vect 1 1))
                       (make-segment (make-vect 0 1) (make-vect 1 0)))))
-; (paint x-frame)
+;(paint x-frame)
 
 (define diamond-frame
   (segments->painter (list
@@ -228,7 +231,7 @@
                       (make-segment (make-vect .6 0) (make-vect .5 .3)) 
                       (make-segment (make-vect .5 .3) (make-vect .4 0)) 
                       (make-segment (make-vect .4 0) (make-vect .25 0)))))
-; (paint George)
+;(paint George)
 
 ; Transforming and combining painters
 (define sub-vect1 vector-sub)
@@ -247,28 +250,28 @@
                      (make-vect 0.0 1.0)    ; new origin
                      (make-vect 1.0 1.0)    ; new end of edge1
                      (make-vect 0.0 0.0)))  ; new end of edge2
-; (paint (flip-vert-v1 wave))
+;(paint (flip-vert-v1 wave))
 
 (define (shrink-to-upper-right painter)
   (transform-painter painter
                      (make-vect 0.5 0.5)
                      (make-vect 1.0 0.5)
                      (make-vect 0.5 1.0)))
-; (paint (shrink-to-upper-right wave))
+;(paint (shrink-to-upper-right wave))
 
 (define (rotate90-v1 painter)
   (transform-painter painter
                      (make-vect 1.0 0.0)
                      (make-vect 1.0 1.0)
                      (make-vect 0.0 0.0)))
-; (paint (rotate90-v1 wave))
+;(paint (rotate90-v1 wave))
 
 (define (squash-inwards painter)
   (transform-painter painter
                      (make-vect 0.0 0.0)
                      (make-vect 0.65 0.35)
                      (make-vect 0.35 0.65)))
-; (paint (squash-inwards wave)); error, doesn't support it.
+;(paint (squash-inwards wave)); error, doesn't support it.
 
 (define (beside-v1 painter1 painter2)
   (let ((split-point (make-vect 0.5 0.0)))
@@ -285,7 +288,7 @@
       (lambda (frame)
         (paint-left frame)
         (paint-right frame)))))
-; (paint (beside-v1 wave (flip-vert-v1 wave)))
+;(paint (beside-v1 wave (flip-vert-v1 wave)))
 
 ; Exercise 2.50
 (define (flip-horiz-v1 painter)
@@ -325,7 +328,7 @@
       (lambda (frame)
         (paint-bottom frame)
         (paint-top frame)))))
-; (paint (below-v1 wave (flip-vert-v1 wave)))
+;(paint (below-v1 wave (flip-vert-v1 wave)))
 (define (below-v2 painter1 painter2)
   (rotate90-v1 (beside-v1 (rotate270-v1 painter1) (rotate270-v1 painter2))))
 ; (paint (below-v2 wave (flip-vert-v1 wave)))
