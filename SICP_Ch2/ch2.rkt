@@ -498,15 +498,59 @@
 ;(adjoin-tree-set 6 (list 7 (list 3 (list 1 nil nil) (list 5 nil nil)) (list 9 nil (list 11 nil nil))))
 ;(7 (3 (1 () ()) (5 () (6 () ()))) (9 () (11 () ())))
 
+(define (lookup given-key set-of-records)
+  (cond ((null? set-of-records) false)
+        ((equal? given-key (key (car set-of-records)))
+         (car set-of-records))
+        (else (lookup given-key (cdr set-of-records)))))
 
+;ex 2.66
+(define (make-record key value)
+  (cons key value))
 
+(define (key record)
+  (car record))
 
+(define (value record)
+  (cdr record))
 
+(define (lookup-bst given-key bst)
+  (cond ((null? bst) false)
+        ((= given-key (key (entry bst)))
+         (value (entry bst)))
+        ((< given-key (key (entry bst)))
+         (lookup-bst given-key (left-branch bst)))
+        (else
+         (lookup-bst given-key (right-branch bst)))))
 
+;ex 2.64
+(define (list->tree elements)
+  (car (partial-tree elements (length elements))))
+(define (partial-tree elts n)
+  (if (= n 0)
+      (cons '() elts)
+      (let ((left-size (quotient (- n 1) 2)))
+        (let ((left-result
+               (partial-tree elts left-size)))
+          (let ((left-tree (car left-result))
+                (non-left-elts (cdr left-result))
+                (right-size (- n (+ left-size 1))))
+            (let ((this-entry (car non-left-elts))
+                  (right-result (partial-tree (cdr non-left-elts)
+                                              right-size)))
+              (let ((right-tree (car right-result))
+                    (remaining-elts (cdr right-result)))
+                (cons (make-tree this-entry
+                                 left-tree
+                                 right-tree)
+                      remaining-elts))))))))
 
+(define binary-tree (list->tree '((1 "Yellow")
+                                  (2 "Blue")
+                                  (3 "Red")
+                                  (4 "White")
+                                  (9 "Green"))))
 
-
-
-
-
-
+;(lookup-bst 9 binary-tree)
+;(lookup-bst 12 binary-tree)
+;(lookup-bst 2 binary-tree)
