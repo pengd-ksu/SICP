@@ -1,6 +1,6 @@
 #lang racket
 
-;ex 2.61
+;ex 2.62
 (define (element-of-order-set? x set)
   (cond ((null? set) false)
         ((= x (car set)) true)

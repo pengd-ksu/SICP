@@ -480,7 +480,7 @@
 (define (element-of-tree-set? x set)
   (cond ((null? set) false)
         ((= x (entry set)) true)
-        ((< x (entry))
+        ((< x (entry set))
          (element-of-tree-set? x (left-branch set)))
         ((> x (entry set))
          (element-of-tree-set? x (right-branch set)))))
