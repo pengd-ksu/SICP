@@ -592,18 +592,29 @@
                (choose-branch (car bits) current-branch)))
           (if (leaf? next-branch)
               (cons (symbol-leaf next-branch)
-                    (decode-1 (cdr bits) tree))
-              (decode-1 (cdr bits) next-branch)))))
+                    (decode-1 (cdr bits) tree)) ; go back to tree, so we restart from root
+              (decode-1 (cdr bits) next-branch))))) ; continue with the next branch
   (decode-1 bits tree))
 (define (choose-branch bit branch)
-  (cond ((= bit 0) (left-branch branch))
-        ((= bit 1) (right-branch branch))
+  (cond ((= bit 0) (left-branch-huffman branch))
+        ((= bit 1) (right-branch-huffman branch))
         (else (error "bad bit: CHOOSE-BRANCH" bit))))
 
+(define (adjoin-set-huffman x set)
+  (cond ((null? set) (list x))
+        ((< (weight x) (weight (car set))) (cons x set))
+        (else (cons (car set)
+                    (adjoin-set-huffman x (cdr set))))))
 
+(define (make-leaf-set pairs)
+  (if (null? pairs)
+      '()
+      (let ((pair (car pairs)))
+         (adjoin-set-huffman (make-leaf (car pair)    ; symbol
+                                (cadr pair))  ; frequecy
+                     (make-leaf-set (cdr pairs))))))
 
-
-
+(make-leaf-set '((A 4) (B 2) (C 1) (D 1)))
 
 
 
