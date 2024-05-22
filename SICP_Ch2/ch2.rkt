@@ -611,7 +611,7 @@
       '()
       (let ((pair (car pairs)))
          (adjoin-set-huffman (make-leaf (car pair)    ; symbol
-                                (cadr pair))  ; frequecy
+                                        (cadr pair))  ; frequecy
                      (make-leaf-set (cdr pairs))))))
 
 (make-leaf-set '((A 4) (B 2) (C 1) (D 1)))
